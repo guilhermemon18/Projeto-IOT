@@ -27,8 +27,13 @@ function Navbar() {
                 </button>
                 <div className={`collapse navbar-collapse ${isNavOpen ? 'show' : ''}`}>
                     <ul className="navbar-nav ml-auto">
+                    <li className="nav-item">
+                            <Link to="/" className="nav-link" onClick={toggleNav}>
+                                Home
+                            </Link>
+                        </li>
                         <li className="nav-item" onClick={toggleNav}>
-                            <Link to="/" className="nav-link">
+                            <Link to="/dataset" className="nav-link">
                                 Dashboard
                             </Link>
                         </li>
@@ -37,11 +42,7 @@ function Navbar() {
                                 Alunos
                             </Link>
                         </li>
-                        <li className="nav-item">
-                            <Link to="/cursos" className="nav-link" onClick={toggleNav}>
-                                Cursos
-                            </Link>
-                        </li>
+                      
                         <li className="nav-item">
                             <Link to="/relatorios" className="nav-link" onClick={toggleNav}>
                                 Relatórios

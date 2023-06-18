@@ -13,8 +13,8 @@ def obter_dados():
 
     # Criar um dicionário com os dados
     dados = {
-        'temperatura': temperatura,
-        'umidade': umidade
+        'temperature': temperatura,
+        'humidity': umidade
     }
 
     # Retornar os dados como resposta em formato JSON

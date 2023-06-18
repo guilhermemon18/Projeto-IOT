@@ -3,9 +3,9 @@ import { Chart, CategoryScale, LinearScale, PointElement, LineController, LineEl
 
 import { Line } from 'react-chartjs-2';
 import './index.css'
-import Navbar from './components/NavBar';
 import GraficoLinha from 'components/GraficoLinha';
 import { BASE_URL } from 'utils/requests';
+import axios from 'axios';
 
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineController, LineElement, Legend, Tooltip);
@@ -16,16 +16,13 @@ interface SensorData {
 }
 
 const fetchData = async (): Promise<SensorData> => {
-  // Simulação de requisição assíncrona para obter dados do sistema IoT
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const data: SensorData = {
-        temperature: Math.random() * 100,
-        humidity: Math.random() * 100,
-      };
-      resolve(data);
-    }, 2000); // Simula um atraso de 2 segundos na resposta
-  });
+  try {
+    const response = await axios.get(BASE_URL + '/dados');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching sensor data:', error);
+    throw error;
+  }
 };
 
 const App: React.FC = () => {
@@ -73,32 +70,6 @@ const App: React.FC = () => {
       )}
 
       <div className="chart-container">
-        {/* <Line
-          data={{
-            labels: Array.from({ length: chartData.temperature.length }, (_, i) => i.toString()),
-            datasets: [
-              {
-                label: 'Temperatura (últimas horas)',
-                data: chartData.temperature,
-                fill: false,
-                borderColor: 'rgb(75, 192, 192)',
-              },
-              {
-                label: 'Umidade (últimas horas)',
-                data: chartData.humidity,
-                fill: false,
-                borderColor: 'rgb(192, 75, 192)',
-              },
-            ],
-          }}
-          options={{
-            scales: {
-              y: {
-                beginAtZero: true,
-              },
-            },
-          }}
-        /> */}
         <GraficoLinha apiUrl= {BASE_URL + '/dadosgrafico'}/>
       </div>
     </div>
