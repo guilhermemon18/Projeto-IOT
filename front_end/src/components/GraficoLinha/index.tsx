@@ -3,6 +3,10 @@ import { ChartData } from 'chart.js';
 import axios from 'axios';
 import { BASE_URL } from 'utils/requests';
 import { Chart } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineController, LineElement, ArcElement,Legend, Tooltip } from 'chart.js';
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineController, LineElement, Legend, Tooltip);
+
 
 interface LineChartProps {
   apiUrl: string;

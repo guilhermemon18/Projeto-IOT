@@ -15,8 +15,7 @@ function Navbar() {
         <header>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                 <Link to="/" className="navbar-brand">
-                    Monitoramento Alunos
-                    {/* de Evasão */}
+                    Monitoramento Ambiente Salas IOT
                 </Link>
                 <button
                     className="navbar-toggler"

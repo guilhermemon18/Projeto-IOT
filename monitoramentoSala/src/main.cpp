@@ -4,18 +4,19 @@
 #include <PubSubClient.h>
 #include <WiFi.h>
 #include <string>
+#include <Adafruit_Sensor.h>
 
 //Define a o Wi-fi e a Senha que o esp ira se conectar
 //mudar para o wifi da minha casa!
 // #define SSIDRASP "TCC-Gabriel"
 // #define PASS "tccGabriel"
 
-#define SSIDRASP "TCC-Gabriel"
-#define PASS "tccGabriel"
+#define SSIDRASP "Wifi"
+#define PASS "12345678"
 
 
 //Define o IP e a porta do Broker para o MQTT
-#define RASP_BROKER_IP "192.168.0.103"
+#define RASP_BROKER_IP "192.168.1.223"
 #define PORTA 1883
 
 //nome topico publicacao
@@ -70,6 +71,7 @@ void loop() {
     Serial.print("Humidity: ");
     Serial.println(sensor.getHumidity());
     mensagem = "Umidade: " + String(sensor.getHumidity()) + ", " + "Temperatura: " + String(sensor.getTemperature());
+    //dá para alterar amsg para obter melhor os dados!
     
   } else {
     // Caso haja um erro na leitura do sensor

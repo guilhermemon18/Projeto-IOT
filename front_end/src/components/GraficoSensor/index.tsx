@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import './index.css'
-import GraficoLinha from 'components/GraficoLinha';
+import  { useEffect, useState } from 'react';
 import { BASE_URL } from 'utils/requests';
 import axios from 'axios';
-
 
 
 interface SensorData {
@@ -21,15 +18,9 @@ const fetchData = async (): Promise<SensorData> => {
   }
 };
 
-const App: React.FC = () => {
+function GraficoSensor() {
   const [sensorData, setSensorData] = useState<SensorData | null>(null);
-  //const [chartData, setChartData] = useState<number[]>([]);
 
-  const [chartData, setChartData] = useState<{ temperature: number[]; humidity: number[] }>({
-    temperature: [],
-    humidity: [],
-  });
-  
 
   useEffect(() => {
   
@@ -37,10 +28,6 @@ const App: React.FC = () => {
     const fetchDataAndChart = async () => {
       const data = await fetchData();
       setSensorData(data);
-      setChartData((prevChartData) => ({
-        temperature: [...prevChartData.temperature, data.temperature],
-        humidity: [...prevChartData.humidity, data.humidity],
-      }));
     };
     
 
@@ -52,9 +39,7 @@ const App: React.FC = () => {
   }, []);
 
   return (
-
-    <div className="App">
-
+    <div>
       <h1>Monitoramento IoT</h1>
       {sensorData ? (
         <div>
@@ -64,12 +49,8 @@ const App: React.FC = () => {
       ) : (
         <p>Carregando dados...</p>
       )}
-
-      <div className="chart-container">
-        <GraficoLinha apiUrl= {BASE_URL + '/dadosgrafico'}/>
-      </div>
     </div>
   );
 };
 
-export default App;
+export default GraficoSensor;

@@ -1,5 +1,8 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
+
+from src.testemqtt import get_umidadeTemperaturaAtual
+
 app = Flask(__name__)
 CORS(app)
 
@@ -7,9 +10,9 @@ CORS(app)
 # Rota para obter os dados de temperatura e umidade
 @app.route('/dados', methods=['GET'])
 def obter_dados():
-    # Código para obter os dados dos sensores
-    temperatura = 25.5
-    umidade = 60.2
+
+    umidade, temperatura = get_umidadeTemperaturaAtual('sala1')
+
 
     # Criar um dicionário com os dados
     dados = {
