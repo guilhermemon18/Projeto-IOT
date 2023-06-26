@@ -1,6 +1,7 @@
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BASE_URL } from 'utils/requests';
 import axios from 'axios';
+import GaugeComponent from 'react-gauge-component';
 
 
 interface SensorData {
@@ -23,13 +24,13 @@ function GraficoSensor() {
 
 
   useEffect(() => {
-  
+
 
     const fetchDataAndChart = async () => {
       const data = await fetchData();
       setSensorData(data);
     };
-    
+
 
     const interval = setInterval(fetchDataAndChart, 5000);
 
@@ -40,7 +41,6 @@ function GraficoSensor() {
 
   return (
     <div>
-      <h1>Monitoramento IoT</h1>
       {sensorData ? (
         <div>
           <p>Temperatura: {sensorData.temperature.toFixed(2)} °C</p>
@@ -49,8 +49,13 @@ function GraficoSensor() {
       ) : (
         <p>Carregando dados...</p>
       )}
+
+
+    
+
     </div>
   );
 };
+
 
 export default GraficoSensor;

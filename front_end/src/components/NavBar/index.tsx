@@ -26,27 +26,25 @@ function Navbar() {
                 </button>
                 <div className={`collapse navbar-collapse ${isNavOpen ? 'show' : ''}`}>
                     <ul className="navbar-nav ml-auto">
-                    <li className="nav-item">
+                        <li className="nav-item">
                             <Link to="/" className="nav-link" onClick={toggleNav}>
                                 Home
                             </Link>
                         </li>
-                        <li className="nav-item" onClick={toggleNav}>
-                            <Link to="/dataset" className="nav-link">
-                                Dashboard
-                            </Link>
+                        <li className="nav-item dropdown">
+                            <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Sala Ativa</a>
+                            <ul className="dropdown-menu">
+                                <li><a className="dropdown-item" href="#">Sala 1</a></li>
+                                <li><a className="dropdown-item" href="#">Sala 2</a></li>
+                                <li><a className="dropdown-item" href="#">Sala 3</a></li>
+                            </ul>
                         </li>
                         <li className="nav-item" onClick={toggleNav}>
-                            <Link to="/alunos" className="nav-link">
-                                Alunos
+                            <Link to="/cadastrarsala" className="nav-link">
+                                Cadastrar Nova Sala
                             </Link>
                         </li>
-                      
-                        <li className="nav-item">
-                            <Link to="/relatorios" className="nav-link" onClick={toggleNav}>
-                                Relatórios
-                            </Link>
-                        </li>
+
                     </ul>
                 </div>
             </nav>

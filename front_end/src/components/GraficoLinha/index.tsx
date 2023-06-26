@@ -8,15 +8,13 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineControl
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineController, LineElement, Legend, Tooltip);
 
 
-interface LineChartProps {
-  apiUrl: string;
-}
 
-const LineChart: React.FC<LineChartProps> = ({ apiUrl = BASE_URL + '/dadosgrafico' }) => {
+const LineChart: React.FC = () => {
   const [chartData, setChartData] = useState<ChartData>({ labels: [], datasets: [] });
 
   const fetchData = async () => {
     try {
+      const apiUrl: string = BASE_URL + '/dadosgrafico'; 
       const response = await axios.get(apiUrl);
       const { temperatura, umidade } = response.data;
 

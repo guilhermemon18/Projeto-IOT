@@ -1,10 +1,12 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
+from src.database import RoomDAO, RoomAlreadyExistsError, DatabaseConnectionManager
 from src.testemqtt import get_umidadeTemperaturaAtual
 
 app = Flask(__name__)
 CORS(app)
+
 
 
 # Rota para obter os dados de temperatura e umidade
@@ -22,6 +24,33 @@ def obter_dados():
 
     # Retornar os dados como resposta em formato JSON
     return jsonify(dados)
+
+
+@app.route('/cadastro-sala', methods=['POST'])
+def cadastrar_sala():
+    dao = RoomDAO()
+    dados = request.get_json()
+    nome_sala = dados['nomeSala']
+    localizacao = dados['localizacao']
+    mensagem = 'Sala cadastrada com sucesso'
+    try:
+        dao.insert_room(nome_sala, localizacao)
+    except RoomAlreadyExistsError as e:
+        print(f"Error creating room: {str(e)}")
+        mensagem = str(e)
+    # Retorne uma resposta para o React
+    return jsonify({'mensagem': mensagem})
+
+# Rota para obter os nomes das salas
+@app.route('/salas', methods=['GET'])
+def obter_dados():
+    dao = RoomDAO()
+    salas = dao.get_all_room_names()
+    # Criar um dicionário com os dados
+    dados = {
+        'salas': salas,
+    }
+    return jsonify(salas)
 
 
 # Rota para obter os dados de temperatura e umidade

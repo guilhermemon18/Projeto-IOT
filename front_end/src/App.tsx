@@ -3,7 +3,10 @@ import './index.css'
 import GraficoLinha from 'components/GraficoLinha';
 import { BASE_URL } from 'utils/requests';
 import axios from 'axios';
-
+import Navbar from 'components/NavBar';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Graficos from 'pages/Graficos';
+import CadastroSala from 'pages/CadastroSala';
 
 
 interface SensorData {
@@ -29,10 +32,10 @@ const App: React.FC = () => {
     temperature: [],
     humidity: [],
   });
-  
+
 
   useEffect(() => {
-  
+
 
     const fetchDataAndChart = async () => {
       const data = await fetchData();
@@ -42,7 +45,7 @@ const App: React.FC = () => {
         humidity: [...prevChartData.humidity, data.humidity],
       }));
     };
-    
+
 
     const interval = setInterval(fetchDataAndChart, 5000);
 
@@ -52,23 +55,28 @@ const App: React.FC = () => {
   }, []);
 
   return (
+    <BrowserRouter>
+      <div className="App">
+        <Navbar />
+        <Routes>
+        <Route path="/" element={<Graficos />} />
+        <Route path="/cadastrarsala" element={<CadastroSala />} />
+      </Routes>
+        {/* {sensorData ? (
+          <div>
+            <p>Temperatura: {sensorData.temperature.toFixed(2)} °C</p>
+            <p>Umidade: {sensorData.humidity.toFixed(2)} %</p>
+          </div>
+        ) : (
+          <p>Carregando dados...</p>
+        )}
 
-    <div className="App">
+        <div className="chart-container">
+          <GraficoLinha />
+        </div> */}
 
-      <h1>Monitoramento IoT</h1>
-      {sensorData ? (
-        <div>
-          <p>Temperatura: {sensorData.temperature.toFixed(2)} °C</p>
-          <p>Umidade: {sensorData.humidity.toFixed(2)} %</p>
-        </div>
-      ) : (
-        <p>Carregando dados...</p>
-      )}
-
-      <div className="chart-container">
-        <GraficoLinha apiUrl= {BASE_URL + '/dadosgrafico'}/>
       </div>
-    </div>
+    </BrowserRouter>
   );
 };
 
