@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { BASE_URL } from 'utils/requests';
 import axios from 'axios';
 import GaugeComponent from 'react-gauge-component';
+import GraficoTemperatura from 'components/GraficoTemperatura';
 
 
 interface SensorData {
@@ -45,6 +46,7 @@ function GraficoSensor() {
         <div>
           <p>Temperatura: {sensorData.temperature.toFixed(2)} °C</p>
           <p>Umidade: {sensorData.humidity.toFixed(2)} %</p>
+          <GraficoTemperatura />
         </div>
       ) : (
         <p>Carregando dados...</p>

@@ -29,6 +29,7 @@ def dadosMQTT(topico):
 
 def get_umidadeTemperaturaAtual(nomeSala="sala1"):
     dados_string = dadosMQTT("dispositivo/" + nomeSala)
+    print(dados_string)
     # Encontre o índice do caractere ":" para separar a string
     indice_umidade = dados_string.index(":")
     indice_temperatura = dados_string.index(", Temperatura:")

@@ -43,7 +43,7 @@ def cadastrar_sala():
 
 # Rota para obter os nomes das salas
 @app.route('/salas', methods=['GET'])
-def obter_dados():
+def obter_salas():
     dao = RoomDAO()
     salas = dao.get_all_room_names()
     # Criar um dicionário com os dados
