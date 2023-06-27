@@ -1,18 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 
-function getRandomNumber() {
-  return Math.random() * 100;
-}
-
-export function getData() {
+export function getData(temperatura: number) {
   return [
     ["Label", "Value"],
-    ["Temperatura", getRandomNumber()],
+    ["Temperatura", temperatura],
   ];
 }
 
 export const options = {
+  // width: 100, height: 120,
   yellowColor: '#0000FF',
   redFrom: 26,
   redTo: 60,
@@ -25,26 +22,26 @@ export const options = {
   max: 60
 };
 
-export default function GraficoTemperatura() {
-  const [data, setData] = useState(getData);
+interface GraficoTemperaturaProps {
+  temperatura: number;
+}
+
+const GraficoTemperatura: React.FC<GraficoTemperaturaProps> = ({ temperatura }) => {
+  const [data, setData] = useState(getData(temperatura));
 
   useEffect(() => {
-    const id = setInterval(() => {
-      setData(getData());
-    }, 3000);
-
-    return () => {
-      clearInterval(id);
-    };
-  });
+    setData(getData(temperatura));
+  }, [temperatura]);
 
   return (
     <Chart
       chartType="Gauge"
-      width="100%"
-      height="400px"
+      // width="100%"
+      // height="400px"
       data={data}
       options={options}
     />
   );
-}
+};
+
+export default GraficoTemperatura;

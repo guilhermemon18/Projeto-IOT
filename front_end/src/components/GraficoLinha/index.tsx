@@ -17,10 +17,11 @@ const LineChart: React.FC = () => {
       const apiUrl: string = BASE_URL + '/dadosgrafico'; 
       const response = await axios.get(apiUrl);
       const { temperatura, umidade } = response.data;
+      console.log(response.data)
 
       // Crie um novo objeto de dados para o gráfico
       const newChartData: ChartData = {
-        labels: temperatura.map((data: number, index: number) => `Leitura ${index + 1}`),
+        labels: temperatura.map((data: number, index: number) => `${index + 1}`),
         datasets: [
           {
             label: 'Temperatura',

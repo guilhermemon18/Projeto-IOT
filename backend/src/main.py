@@ -1,7 +1,9 @@
+import threading
+
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-from src.database import RoomDAO, RoomAlreadyExistsError, DatabaseConnectionManager
+from src.database import RoomDAO, RoomAlreadyExistsError, DatabaseConnectionManager, run
 from src.testemqtt import get_umidadeTemperaturaAtual
 
 app = Flask(__name__)
@@ -14,7 +16,7 @@ CORS(app)
 def obter_dados():
 
     umidade, temperatura = get_umidadeTemperaturaAtual('sala1')
-
+    # umidade, temperatura = 85, 40
 
     # Criar um dicionário com os dados
     dados = {
@@ -59,7 +61,24 @@ def obter_dados_grafico():
     # Código para obter os dados dos sensores
     temperatura = [25.5, 26.0, 25.8, 26.2]  # Exemplo de array de temperatura
     umidade = [60.2, 61.0, 59.8, 60.5]  # Exemplo de array de umidade
+    dao = RoomDAO()
+    dados = dao.get_temperature_and_humidity("sala1")
 
+    # Criar listas vazias para armazenar as temperaturas e umidades
+    temperatures = []
+    humidities = []
+
+    # Percorrer os resultados da consulta e separar as temperaturas e umidades
+    for result in dados:
+        temperatures.append(result[0])
+        humidities.append(result[1])
+    #
+    temperatura = temperatures
+    umidade = humidities
+
+    print(dados)
+    print(temperatura)
+    print(umidade)
     # Criar um dicionário com os dados
     dados = {
         'temperatura': temperatura,
@@ -70,5 +89,10 @@ def obter_dados_grafico():
     return jsonify(dados)
 
 if __name__ == '__main__':
+    # Criar uma instância da classe Thread, passando a função main como alvo
+    thread = threading.Thread(target=run)
+
+    # Iniciar a execução da thread
+    thread.start()
     app.run(debug=True)
 

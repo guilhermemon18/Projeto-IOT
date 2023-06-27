@@ -1,8 +1,13 @@
 import sqlite3
 import datetime
+import time
+
+from src.testemqtt import get_umidadeTemperaturaAtual
+
 
 class RoomAlreadyExistsError(Exception):
     pass
+
 
 # Factory para criar a conexão com o banco de dados
 class DatabaseConnectionFactory:
@@ -101,7 +106,7 @@ def main():
     room_dao.insert_measure("Sala 1", 25.5, 60.2, "2023-06-25 12:00:00")
 
     # Buscar apenas temperaturas e umidades das últimas 24 horas em relação à hora atual
-    #room_name = "Sala 1"  # Nome da sala desejada
+    # room_name = "Sala 1"  # Nome da sala desejada
     temperature_and_humidity = room_dao.get_temperature_and_humidity("Sala 1")
     print("Medidas de temperatura e umidade das últimas 24 horas:")
     for measure in temperature_and_humidity:
@@ -116,5 +121,28 @@ def main():
     connection.close()
 
 
+def run():
+    room_dao = RoomDAO()
+
+    while True:
+        # Obter todos os nomes das salas
+        room_names = room_dao.get_all_room_names()
+
+        for room_name in room_names:
+            # Obter os valores de umidade e temperatura atual para cada sala
+            valor_umidade, valor_temperatura = get_umidadeTemperaturaAtual(room_name)
+
+            # Obter a data e hora atual
+            current_datetime = datetime.datetime.now()
+            current_datetime_str = current_datetime.strftime('%Y-%m-%d %H:%M:%S')
+
+            # Inserir os valores de umidade e temperatura na tabela measures
+            room_dao.insert_measure(room_name, valor_temperatura, valor_umidade, current_datetime_str)
+
+        # Aguardar 60 segundos antes de obter as medidas novamente
+        time.sleep(60)
+
+
 if __name__ == '__main__':
-    main()
+    run()
+    # main()

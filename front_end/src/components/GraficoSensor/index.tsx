@@ -3,6 +3,7 @@ import { BASE_URL } from 'utils/requests';
 import axios from 'axios';
 import GaugeComponent from 'react-gauge-component';
 import GraficoTemperatura from 'components/GraficoTemperatura';
+import GraficoUmidade from 'components/GraficoUmidade';
 
 
 interface SensorData {
@@ -46,7 +47,8 @@ function GraficoSensor() {
         <div>
           <p>Temperatura: {sensorData.temperature.toFixed(2)} °C</p>
           <p>Umidade: {sensorData.humidity.toFixed(2)} %</p>
-          <GraficoTemperatura />
+          <GraficoTemperatura temperatura={sensorData.temperature} />
+          <GraficoUmidade umidade={sensorData.humidity} />
         </div>
       ) : (
         <p>Carregando dados...</p>
