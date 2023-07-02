@@ -3,18 +3,16 @@ import threading
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-from src.database import RoomDAO, RoomAlreadyExistsError, DatabaseConnectionManager, run
+from src.database import RoomDAO, RoomAlreadyExistsError, DatabaseConnectionManager, run, RoomNotFoundError
 from src.testemqtt import get_umidadeTemperaturaAtual
 
 app = Flask(__name__)
 CORS(app)
 
 
-
 # Rota para obter os dados de temperatura e umidade
 @app.route('/dados', methods=['GET'])
 def obter_dados():
-
     umidade, temperatura = get_umidadeTemperaturaAtual('sala1')
     # umidade, temperatura = 85, 40
 
@@ -42,6 +40,18 @@ def cadastrar_sala():
         mensagem = str(e)
     # Retorne uma resposta para o React
     return jsonify({'mensagem': mensagem})
+
+
+@app.route('/salas/<nome>', methods=['DELETE'])
+def excluir_sala(nome):
+    dao = RoomDAO()
+    try:
+        dao.delete_room(nome)
+        return jsonify({'mensagem': f'Sala {nome} excluída com sucesso'})
+    except RoomNotFoundError:
+        return jsonify({'mensagem': f'Sala {nome} não encontrada'}), 404
+    except Exception as e:
+        return jsonify({'mensagem': f'Erro ao excluir sala: {str(e)}'}), 500
 
 # Rota para obter os nomes das salas
 @app.route('/nomes-salas', methods=['GET'])
@@ -103,6 +113,7 @@ def obter_dados_grafico():
     # Retornar os dados como resposta em formato JSON
     return jsonify(dados)
 
+
 if __name__ == '__main__':
     # Criar uma instância da classe Thread, passando a função main como alvo
     thread = threading.Thread(target=run)
@@ -110,4 +121,3 @@ if __name__ == '__main__':
     # Iniciar a execução da thread
     thread.start()
     app.run(debug=True)
-

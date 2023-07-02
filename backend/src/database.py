@@ -10,6 +10,10 @@ class RoomAlreadyExistsError(Exception):
     pass
 
 
+class RoomNotFoundError(Exception):
+    pass
+
+
 # Factory para criar a conexão com o banco de dados
 class DatabaseConnectionFactory:
     @staticmethod
@@ -60,6 +64,14 @@ class RoomDAO:
             self.connection.commit()
         except sqlite3.IntegrityError:
             raise RoomAlreadyExistsError(f"A room with name '{name}' already exists.")
+
+    def delete_room(self, name):
+        query = "DELETE FROM rooms WHERE name = ?"
+        cursor = self.connection.cursor()
+        cursor.execute(query, (name,))
+        if cursor.rowcount == 0:
+            raise RoomNotFoundError(f"Room '{name}' not found")
+        self.connection.commit()
 
     def get_all_rooms(self):
         query = "SELECT * FROM rooms"

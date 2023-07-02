@@ -37,7 +37,7 @@ function Graficos() {
     };
 
 
-    const interval = setInterval(fetchDataAndChart, 5000);
+    const interval = setInterval(fetchDataAndChart, 10000);
 
     return () => {
       clearInterval(interval);
