@@ -75,7 +75,7 @@ function Graficos() {
 
         </div>
       ) : (
-        <p>Carregando dados...</p>
+        <p className='text-center'>Carregando dados...</p>
       )}
 
       <div className="row justify-content-center align-items-center">

@@ -39,7 +39,7 @@ const SalasList: React.FC = () => {
 
   return (
     <div>
-      <h1>Lista de Salas</h1>
+      <h1 className='text-center'>Lista de Salas</h1>
       <table className="table">
         <thead>
           <tr>
