@@ -49,7 +49,7 @@ const LineChart: React.FC = () => {
     fetchData();
 
     // Execute a função fetchData a cada 1 minuto (60.000 milissegundos)
-    const interval = setInterval(fetchData, 6000);
+    const interval = setInterval(fetchData, 60000);
 
     // Limpe o intervalo quando o componente for desmontado
     return () => clearInterval(interval);

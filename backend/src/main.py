@@ -44,6 +44,18 @@ def cadastrar_sala():
     return jsonify({'mensagem': mensagem})
 
 # Rota para obter os nomes das salas
+@app.route('/nomes-salas', methods=['GET'])
+def obter_nomes_salas():
+    dao = RoomDAO()
+    salas = dao.get_all_room_names()
+    # Criar um dicionário com os dados
+    dados = {
+        'salas': salas,
+    }
+    return jsonify(salas)
+
+
+# Rota para obter os nomes das salas
 @app.route('/salas', methods=['GET'])
 def obter_salas():
     dao = RoomDAO()

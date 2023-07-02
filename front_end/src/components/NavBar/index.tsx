@@ -18,7 +18,7 @@ function Navbar() {
 
   const fetchSalasFromAPI = async () => {
     try {
-      const response = await fetch(BASE_URL + '/salas');
+      const response = await fetch(BASE_URL + '/nomes-salas');
       const data = await response.json();
       setSalaOptions(data);
       setActiveSala(data[0]);
@@ -62,7 +62,7 @@ function Navbar() {
                   <li key={sala}>
                     <a
                       className="dropdown-item"
-                     
+
                       onClick={handleSelectSala}
                     >
                       {sala}
@@ -76,6 +76,13 @@ function Navbar() {
                 Cadastrar Nova Sala
               </Link>
             </li>
+
+            <li className="nav-item" onClick={toggleNav}>
+              <Link to="/listarsalas" className="nav-link">
+                Listar Salas
+              </Link>
+            </li>
+
           </ul>
         </div>
       </nav>

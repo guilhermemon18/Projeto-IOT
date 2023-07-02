@@ -5,6 +5,7 @@ import GraficoTemperatura from 'components/GraficoTemperatura';
 import GraficoUmidade from 'components/GraficoUmidade';
 import React, { useEffect, useState } from 'react';
 import { BASE_URL } from 'utils/requests';
+import './styles.css'
 
 
 interface SensorData {
@@ -52,7 +53,7 @@ function Graficos() {
 
       {sensorData ? (
         <div className="row">
-          <div className="col-md-6 text-center">
+          <div className="col-md-6 text-center chart-carder">
             <h1>Temperatura Atual:</h1>
             {/* Conteúdo do gráfico */}
             <GraficoTemperatura temperatura={sensorData.temperature} />
@@ -60,23 +61,27 @@ function Graficos() {
 
           </div>
 
-          <div className="col-md-6 text-center">
+          <div className="col-md-6 text-center chart-carder">
             {/* Conteúdo do gráfico */}
             <h1>Umidade Atual:</h1>
             <GraficoUmidade umidade={sensorData.humidity} />
             {/* <GraficoSensor /> */}
           </div>
+
+          <div className="col-md-6 chart-carder">
+          <h1>Últimas 24 horas:</h1>
+          {/* Conteúdo do gráfico */}
+          <GraficoLinha />
+        </div>
+
         </div>
       ) : (
         <p>Carregando dados...</p>
       )}
 
-      <div className="row">
-        <h1>Últimas 24 horas:</h1>
-        <div className="col-md-6">
-          {/* Conteúdo do gráfico */}
-          <GraficoLinha />
-        </div>
+      <div className="row justify-content-center align-items-center">
+
+       
       </div>
     </div>
   );

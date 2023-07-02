@@ -1,0 +1,13 @@
+.chart-carder {
+    display: inline-block;
+    border: 1px solid black;
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.chart-carder table{
+    margin: 0 auto; /* Herda a margem do elemento pai */
+    text-align: center;
+}

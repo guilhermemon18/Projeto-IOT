@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
+import './styles.css'
 
 export function getData(temperatura: number) {
   return [
@@ -19,7 +20,8 @@ export const options = {
   greenTo: 26,
   minorTicks: 10,
   min: -10,
-  max: 60
+  max: 60,
+  title: 'Temperatura Atual'
 };
 
 interface GraficoTemperaturaProps {
@@ -40,6 +42,8 @@ const GraficoTemperatura: React.FC<GraficoTemperaturaProps> = ({ temperatura }) 
       // height="400px"
       data={data}
       options={options}
+      className="tabela"
+      
     />
   );
 };

@@ -1,0 +1,7 @@
+.tabela table{
+    margin: auto; /* Herda a margem do elemento pai */
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

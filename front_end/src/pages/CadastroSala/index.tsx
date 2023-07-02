@@ -30,6 +30,7 @@ const CadastroSala: React.FC = () => {
       });
 
       const data = await response.json();
+      window.location.reload();
       setMensagem(data.mensagem);
     } catch (error) {
       console.error('Erro ao cadastrar sala:', error);

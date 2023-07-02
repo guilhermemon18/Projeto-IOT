@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
+import './styles.css'
 
 export function getData(umidade: number) {
   return [
@@ -40,6 +41,7 @@ const GraficoUmidade: React.FC<GraficoUmidadeProps> = ({ umidade }) => {
     //   height="400px"
       data={data}
       options={options}
+      className="tabela"
     />
   );
 };
