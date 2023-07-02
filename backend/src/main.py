@@ -59,11 +59,14 @@ def obter_nomes_salas():
 @app.route('/salas', methods=['GET'])
 def obter_salas():
     dao = RoomDAO()
-    salas = dao.get_all_room_names()
-    # Criar um dicionário com os dados
-    dados = {
-        'salas': salas,
-    }
+    rows = dao.get_all_rooms()
+    salas = []
+
+    for row in rows:
+        name = row[0]
+        location = row[1]
+        salas.append({"nome": name, "localizacao": location})
+    print(salas)
     return jsonify(salas)
 
 

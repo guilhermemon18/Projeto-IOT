@@ -1,6 +1,5 @@
 import axios from 'axios';
 import GraficoLinha from 'components/GraficoLinha';
-import GraficoSensor from 'components/GraficoSensor';
 import GraficoTemperatura from 'components/GraficoTemperatura';
 import GraficoUmidade from 'components/GraficoUmidade';
 import React, { useEffect, useState } from 'react';

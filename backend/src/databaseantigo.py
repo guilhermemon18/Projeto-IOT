@@ -1,7 +1,6 @@
 import sqlite3
 import datetime
 import time
-import threading
 
 from src.testemqtt import get_umidadeTemperaturaAtual
 
@@ -14,19 +13,19 @@ class RoomAlreadyExistsError(Exception):
 class DatabaseConnectionFactory:
     @staticmethod
     def create_connection():
-        conn = sqlite3.connect('database.db')
+        conn = sqlite3.connect('database.db', check_same_thread=False)
         return conn
 
 
 # Singleton para gerenciar a conexão com o banco de dados
 class DatabaseConnectionManager:
-    _instance = threading.local()
+    _instance = None
 
     @staticmethod
     def get_instance():
-        if not hasattr(DatabaseConnectionManager._instance, 'connection'):
-            DatabaseConnectionManager._instance.connection = DatabaseConnectionFactory.create_connection()
-        return DatabaseConnectionManager._instance.connection
+        if not DatabaseConnectionManager._instance:
+            DatabaseConnectionManager._instance = DatabaseConnectionFactory.create_connection()
+        return DatabaseConnectionManager._instance
 
 
 # DAO para acessar o banco de dados e realizar operações relacionadas às salas e medidas
@@ -64,6 +63,7 @@ class RoomDAO:
     def get_all_rooms(self):
         query = "SELECT * FROM rooms"
         cursor = self.connection.execute(query)
+        print(cursor.fetchall())
         return cursor.fetchall()
 
     def get_all_room_names(self):
@@ -95,13 +95,41 @@ class RoomDAO:
         return cursor.fetchall()
 
 
-# Função para coletar dados e inserir medidas para uma sala específica
-def collect_data_and_insert_measure(room_name):
+# Exemplo de uso
+def main():
+    # Criar as tabelas e inserir dados de exemplo
+    room_dao = RoomDAO()
+
+    # room_dao.insert_room("Sala 1", "Localização 1")
+
+    # Inserir uma medida de temperatura e umidade
+    room_dao.insert_measure("Sala 1", 25.5, 60.2, "2023-06-25 12:00:00")
+
+    # Buscar apenas temperaturas e umidades das últimas 24 horas em relação à hora atual
+    # room_name = "Sala 1"  # Nome da sala desejada
+    temperature_and_humidity = room_dao.get_temperature_and_humidity("Sala 1")
+    print("Medidas de temperatura e umidade das últimas 24 horas:")
+    for measure in temperature_and_humidity:
+        temperature = measure[0]
+        humidity = measure[1]
+        print(f"Temperatura: {temperature}, Umidade: {humidity}")
+
+    room_dao.get_all_rooms()
+    print(room_dao.get_all_room_names())
+    # Encerrar a conexão com o banco de dados
+    connection = DatabaseConnectionManager.get_instance()
+    connection.close()
+
+
+def run():
     room_dao = RoomDAO()
 
     while True:
-        try:
-            # Obter os valores de umidade e temperatura atual para a sala
+        # Obter todos os nomes das salas
+        room_names = room_dao.get_all_room_names()
+
+        for room_name in room_names:
+            # Obter os valores de umidade e temperatura atual para cada sala
             valor_umidade, valor_temperatura = get_umidadeTemperaturaAtual(room_name)
 
             # Obter a data e hora atual
@@ -111,50 +139,10 @@ def collect_data_and_insert_measure(room_name):
             # Inserir os valores de umidade e temperatura na tabela measures
             room_dao.insert_measure(room_name, valor_temperatura, valor_umidade, current_datetime_str)
 
-            # Aguardar 60 segundos antes de obter as medidas novamente
-            time.sleep(60)
-
-        except Exception as e:
-            print(f"Error collecting data for room '{room_name}': {e}")
-
-
-# Exemplo de uso
-def run():
-    # Criar as tabelas e inserir dados de exemplo
-    room_dao = RoomDAO()
-
-    # room_dao.insert_room("Sala 1", "Localização 1")
-
-    # Iniciar threads para coletar dados e inserir medidas para cada sala
-    threads = []
-
-    while True:
-        room_names = room_dao.get_all_room_names()
-
-        # Remover threads antigas que não estão mais ativas
-        threads = [thread for thread in threads if thread.is_alive()]
-
-        # Criar threads para novas salas ou atualizar threads existentes
-        for room_name in room_names:
-            # Verificar se já existe uma thread para essa sala
-            existing_thread = next((thread for thread in threads if thread.name == room_name), None)
-
-            if existing_thread:
-                # Atualizar a thread existente com o novo nome da sala
-                existing_thread.name = room_name
-            else:
-                # Criar uma nova thread para a sala
-                thread = threading.Thread(target=collect_data_and_insert_measure, args=(room_name,), name=room_name)
-                thread.start()
-                threads.append(thread)
-
-        # Aguardar antes de atualizar novamente
+        # Aguardar 60 segundos antes de obter as medidas novamente
         time.sleep(60)
-
-    # Encerrar a conexão com o banco de dados
-    connection = DatabaseConnectionManager.get_instance()
-    connection.close()
 
 
 if __name__ == '__main__':
     run()
+    # main()
