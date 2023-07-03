@@ -112,7 +112,7 @@ def collect_data_and_insert_measure(room_name):
     room_dao = RoomDAO()
 
     while True:
-        try:
+        # try:
             # Obter os valores de umidade e temperatura atual para a sala
             valor_umidade, valor_temperatura = get_umidadeTemperaturaAtual(room_name)
 
@@ -126,8 +126,9 @@ def collect_data_and_insert_measure(room_name):
             # Aguardar 60 segundos antes de obter as medidas novamente
             time.sleep(60)
 
-        except Exception as e:
-            print(f"Error collecting data for room '{room_name}': {e}")
+        # except Exception as e:
+
+            # print(f"Error collecting data for room '{room_name}': {e}")
 
 
 # Exemplo de uso

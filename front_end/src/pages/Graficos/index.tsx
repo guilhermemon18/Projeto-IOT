@@ -12,29 +12,30 @@ interface SensorData {
   humidity: number;
 }
 
-const fetchData = async (): Promise<SensorData> => {
-  try {
-    const response = await axios.get(BASE_URL + '/dados');
-    console.log("entrou fazer requisição dos dados dos gráficos de home!");
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching sensor data:', error);
-    throw error;
-  }
-};
 
 
-function Graficos() {
+type Props = {
+  salaName: string;
+}
+
+
+function Graficos({ salaName }: Props) {
 
   const [sensorData, setSensorData] = useState<SensorData | null>(null);
-
+  const [salaValida, setSalaValida] = useState(false);
 
   useEffect(() => {
-
-
+    setSensorData(null);
+    setSalaValida(true);
     const fetchDataAndChart = async () => {
-      const data = await fetchData();
-      setSensorData(data);
+      try {
+        const data = await fetchData();
+        setSensorData(data);
+        setSalaValida(true);
+      } catch (error) {
+        setSalaValida(false);
+      }
+
     };
 
 
@@ -43,13 +44,26 @@ function Graficos() {
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [salaName]);
 
 
+  const fetchData = async (): Promise<SensorData> => {
+    try {
+      // const response = await axios.get(BASE_URL + '/dados');
+      const response = await axios.get(`${BASE_URL}/dados?sala=${salaName}`);
+      console.log("entrou fazer requisição dos dados dos gráficos de home!");
+      setSalaValida(true);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching sensor data:', error);
+      setSalaValida(false); 
+      
+      throw error;
+    }
+  };
 
   return (
     <div className="container">
-
 
       {sensorData ? (
         <div className="row">
@@ -69,19 +83,20 @@ function Graficos() {
           </div>
 
           <div className="col-md-6 chart-carder">
-          <h1>Últimas 24 horas:</h1>
-          {/* Conteúdo do gráfico */}
-          <GraficoLinha />
-        </div>
+            <h1>Últimas 24 horas:</h1>
+            {/* Conteúdo do gráfico */}
+            <GraficoLinha />
+          </div>
 
         </div>
       ) : (
         <p className='text-center'>Carregando dados...</p>
       )}
+       {!salaValida ? <p className='text-center'>É necessário que haja um sensor configurado para a respectiva sala!</p> : null}
 
       <div className="row justify-content-center align-items-center">
 
-       
+
       </div>
     </div>
   );

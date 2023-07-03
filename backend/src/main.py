@@ -13,16 +13,29 @@ CORS(app)
 # Rota para obter os dados de temperatura e umidade
 @app.route('/dados', methods=['GET'])
 def obter_dados():
-    umidade, temperatura = get_umidadeTemperaturaAtual('sala1')
-    # umidade, temperatura = 85, 40
-    # Criar um dicionário com os dados
-    dados = {
-        'temperature': temperatura,
-        'humidity': umidade
-    }
+    sala = request.args.get('sala')
+    print(sala)
+    # umidade, temperatura = get_umidadeTemperaturaAtual('sala1')
+    try:
+        umidade, temperatura = get_umidadeTemperaturaAtual(sala)
 
-    # Retornar os dados como resposta em formato JSON
-    return jsonify(dados)
+        # umidade, temperatura = 85, 40
+        # Criar um dicionário com os dados
+        dados = {
+            'temperature': temperatura,
+            'humidity': umidade
+        }
+
+        # Retornar os dados como resposta em formato JSON
+        return jsonify(dados)
+    except Exception as e:
+        print(str(e))
+        # Se ocorrer uma exceção, retornar uma resposta de erro
+        mensagem_erro = str(e)
+        resposta = {
+            'error': mensagem_erro
+        }
+        return jsonify(resposta), 400  # Código de status 400 indica uma requisição inválida ou erro do cliente
 
 
 @app.route('/cadastro-sala', methods=['POST'])

@@ -1,4 +1,5 @@
 import threading
+import time
 
 import paho.mqtt.client as mqtt
 
@@ -22,12 +23,14 @@ def dadosMQTT(topico):
         client.subscribe(topico, qos=0)
 
         client.loop_start()
-
-        while ultima_mensagem is None:
+        timeout = time.time() + 6  # Definir um timeout de 6 segundos
+        while ultima_mensagem is None and time.time() < timeout:
             pass  # Aguarda até que a última mensagem seja recebida
 
         client.loop_stop()
         client.disconnect()
+        if ultima_mensagem is None:
+            raise Exception("Tópico inválido ou inexistente: É necessário que haja um sensor configurado para a respectiva sala!")
 
         return ultima_mensagem
 
@@ -46,7 +49,7 @@ def get_umidadeTemperaturaAtual(nomeSala="sala1"):
 
 if __name__ == '__main__':
     for i in range(10):
-        dados = dadosMQTT("dispositivo/sala1")
+        dados = dadosMQTT("dispositivo/sala2")
         print(dados)
         print(get_umidadeTemperaturaAtual())
 
