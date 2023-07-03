@@ -15,7 +15,6 @@ CORS(app)
 def obter_dados():
     umidade, temperatura = get_umidadeTemperaturaAtual('sala1')
     # umidade, temperatura = 85, 40
-
     # Criar um dicionário com os dados
     dados = {
         'temperature': temperatura,
@@ -120,4 +119,5 @@ if __name__ == '__main__':
 
     # Iniciar a execução da thread
     thread.start()
+
     app.run(debug=True)

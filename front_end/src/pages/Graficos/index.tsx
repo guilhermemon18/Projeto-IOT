@@ -15,6 +15,7 @@ interface SensorData {
 const fetchData = async (): Promise<SensorData> => {
   try {
     const response = await axios.get(BASE_URL + '/dados');
+    console.log("entrou fazer requisição dos dados dos gráficos de home!");
     return response.data;
   } catch (error) {
     console.error('Error fetching sensor data:', error);

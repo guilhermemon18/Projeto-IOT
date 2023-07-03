@@ -29,6 +29,8 @@ const SalasList: React.FC = () => {
 
 
   const handleExcluirSala = async (nome: string) => {
+    const confirmacao = window.confirm(`Tem certeza que deseja excluir a sala "${nome}"?`);
+    if(!confirmacao) return;
     try {
       const response = await axios.delete(`${BASE_URL}/salas/${nome}`);
       setSalas(salas.filter((sala) => sala.nome !== nome));

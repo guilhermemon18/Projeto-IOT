@@ -14,25 +14,25 @@ def on_message(client, userdata, msg):
     ultima_mensagem = msg.payload.decode()
 
 def dadosMQTT(topico):
-    global ultima_mensagem
-    global ultima_mensagem
-    ultima_mensagem = None
-    client.on_message = on_message
-    client.connect(broker_address, broker_port, 60)
-    client.subscribe(topico, qos=0) 
-    
-    client.loop_start()
+    with lock:
+        global ultima_mensagem
+        ultima_mensagem = None
+        client.on_message = on_message
+        client.connect(broker_address, broker_port, 60)
+        client.subscribe(topico, qos=0)
 
-    while ultima_mensagem is None:
-        pass  # Aguarda até que a última mensagem seja recebida
+        client.loop_start()
 
-    client.loop_stop()
-    client.disconnect()
+        while ultima_mensagem is None:
+            pass  # Aguarda até que a última mensagem seja recebida
 
-    return ultima_mensagem
+        client.loop_stop()
+        client.disconnect()
+
+        return ultima_mensagem
 
 def get_umidadeTemperaturaAtual(nomeSala="sala1"):
-    with lock:
+
         dados_string = dadosMQTT("dispositivo/" + nomeSala)
         # Encontre o índice do caractere ":" para separar a string
         indice_umidade = dados_string.index(":")
@@ -48,4 +48,5 @@ if __name__ == '__main__':
     for i in range(10):
         dados = dadosMQTT("dispositivo/sala1")
         print(dados)
+        print(get_umidadeTemperaturaAtual())
 

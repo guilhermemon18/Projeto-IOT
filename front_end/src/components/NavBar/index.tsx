@@ -3,7 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { BASE_URL } from 'utils/requests';
 
-function Navbar() {
+type Props = {
+  onChangeSala : Function;
+}
+
+function Navbar({onChangeSala}: Props) {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [activeSala, setActiveSala] = useState('');
   const [salaOptions, setSalaOptions] = useState<string[]>([]);
@@ -22,6 +26,7 @@ function Navbar() {
       const data = await response.json();
       setSalaOptions(data);
       setActiveSala(data[0]);
+      onChangeSala(data[0]);
     } catch (error) {
       console.log('Erro ao obter as salas:', error);
     }
@@ -29,6 +34,7 @@ function Navbar() {
 
   const handleSelectSala = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     setActiveSala(event.currentTarget.textContent || '');
+    onChangeSala(event.currentTarget.textContent || '');
   };
 
   return (
